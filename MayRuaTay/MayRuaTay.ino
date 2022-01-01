@@ -23,7 +23,12 @@ int cho_led = 4;
 int chao_led = 3;
 int bom_led = 2;
 
+//Button cong/tru thoi gian bom dung dich
+int buttonCong = A0;
+int buttonTru = A1;
+
 unsigned long t;
+int timeBomDungDich = 350;
 
 void setup() {
   Serial.begin(9600);
@@ -38,12 +43,14 @@ void setup() {
   pinMode(cho_led, OUTPUT);
   pinMode(chao_led, OUTPUT);
   pinMode(bom_led, OUTPUT);
+  pinMode(buttonCong, INPUT_PULLUP);
+  pinMode(buttonTru, INPUT_PULLUP);
   mlx.begin();
 
-  //  //Moi nuoc
-  //  digitalWrite(bom, HIGH);
-  //  delay(1000);
-  //  digitalWrite(bom, LOW);
+  //    //Moi nuoc
+  //    digitalWrite(bom, HIGH);
+  //    delay(3000);
+  //    digitalWrite(bom, LOW);
 }
 
 void loop() {
@@ -56,6 +63,24 @@ void loop() {
     return;
   }
   cho_status();
+  DieuChinhThoiGianBom();
+}
+
+void DieuChinhThoiGianBom() {
+  if (digitalRead(buttonCong) == HIGH) {
+    Serial.println("Button Cong");
+    timeBomDungDich += 30;
+    digitalWrite(bom_led, HIGH);
+    delay(200);
+    digitalWrite(bom_led, LOW);
+  }
+  if (digitalRead(buttonTru) == HIGH) {
+    Serial.println("Button Tru");
+    timeBomDungDich -= 30;
+    digitalWrite(bom_led, HIGH);
+    delay(200);
+    digitalWrite(bom_led, LOW);
+  }
 }
 
 void cho_status() {
@@ -93,7 +118,7 @@ void bom_status() {
 
   //Bom dung dich sat khuan
   digitalWrite(bom, HIGH);
-  delay(330);
+  delay(timeBomDungDich);
   digitalWrite(bom, LOW);
 
   delay(1000);
@@ -219,24 +244,24 @@ void bom_status() {
     delay(5000);
     return;
   }
-  if (temp == 38) {
-    SdPlay.setFile("tamkhong.wav");
-    SdPlay.play();
-    delay(5000);
-    return;
-  }
-  if (temp == 38.1) {
-    SdPlay.setFile("tammot.wav");
-    SdPlay.play();
-    delay(5000);
-    return;
-  }
-  if (temp == 38.2) {
-    SdPlay.setFile("tamhai.wav");
-    SdPlay.play();
-    delay(5000);
-    return;
-  }
+  //  if (temp == 38) {
+  //    SdPlay.setFile("tamkhong.wav");
+  //    SdPlay.play();
+  //    delay(5000);
+  //    return;
+  //  }
+  //  if (temp == 38.1) {
+  //    SdPlay.setFile("tammot.wav");
+  //    SdPlay.play();
+  //    delay(5000);
+  //    return;
+  //  }
+  //  if (temp == 38.2) {
+  //    SdPlay.setFile("tamhai.wav");
+  //    SdPlay.play();
+  //    delay(5000);
+  //    return;
+  //  }
   //  if (temp == 38.3) {
   //    SdPlay.setFile("tamba.wav");
   //    SdPlay.play();
